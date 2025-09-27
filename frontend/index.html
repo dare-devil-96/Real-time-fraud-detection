@@ -1,272 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudGuard AI Dashboard</title>
-    <!-- Use Tailwind CSS for a modern, responsive design -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
-        }
-        .scroll-container {
-            max-height: 600px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #30363d #161b22;
-        }
-        .scroll-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .scroll-container::-webkit-scrollbar-track {
-            background: #161b22;
-        }
-        .scroll-container::-webkit-scrollbar-thumb {
-            background-color: #30363d;
-            border-radius: 4px;
-            border: 2px solid #161b22;
-        }
-        /* Custom alert animation */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .alert-pulse {
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FraudGuard AI Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; background:#0d1117; color:#c9d1d9; }
+    .scroll-container { max-height: 600px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #30363d #161b22; }
+    .scroll-container::-webkit-scrollbar { width: 8px; }
+    .scroll-container::-webkit-scrollbar-track { background: #161b22; }
+    .scroll-container::-webkit-scrollbar-thumb { background-color: #30363d; border-radius: 4px; border: 2px solid #161b22; }
+    @keyframes pulse { 0%{transform:scale(1);opacity:1} 50%{transform:scale(1.05);opacity:.8} 100%{transform:scale(1);opacity:1} }
+    .alert-pulse { animation: pulse 1.5s ease-in-out infinite; }
+  </style>
 </head>
 <body class="p-8 md:p-12">
+  <div class="max-w-6xl mx-auto space-y-8">
+    <header class="flex flex-col md:flex-row items-center justify-between p-6 bg-[#161b22] rounded-xl shadow-lg border border-gray-700">
+      <h1 class="text-3xl font-bold text-gray-200 mb-4 md:mb-0">FraudGuard AI Dashboard</h1>
+      <button id="addTransactionBtn" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Simulate New Transaction</button>
+    </header>
 
-    <!-- Main Dashboard Container -->
-    <div class="max-w-6xl mx-auto space-y-8">
+    <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2 bg-[#161b22] p-6 rounded-xl shadow-lg border border-gray-700">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-semibold text-gray-200">Real-Time Transaction Stream</h2>
+          <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-400">Low:</span><span class="w-4 h-4 rounded-full bg-green-500"></span>
+            <span class="text-sm text-gray-400">Medium:</span><span class="w-4 h-4 rounded-full bg-yellow-500"></span>
+            <span class="text-sm text-gray-400">High:</span><span class="w-4 h-4 rounded-full bg-red-500"></span>
+          </div>
+        </div>
+        <div id="transactionList" class="scroll-container space-y-4">
+          <div class="text-center text-gray-500 p-8">No transactions yet. Click “Simulate New Transaction”.</div>
+        </div>
+      </div>
 
-        <!-- Header and Controls -->
-        <header class="flex flex-col md:flex-row items-center justify-between p-6 bg-[#161b22] rounded-xl shadow-lg border border-gray-700">
-            <h1 class="text-3xl font-bold text-gray-200 mb-4 md:mb-0">FraudGuard AI Dashboard</h1>
-            <button id="addTransactionBtn" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
-                Simulate New Transaction
-            </button>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Panel: Transaction Stream -->
-            <div class="lg:col-span-2 bg-[#161b22] p-6 rounded-xl shadow-lg border border-gray-700">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-semibold text-gray-200">Real-Time Transaction Stream</h2>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm font-medium text-gray-400">Low Risk:</span>
-                        <span class="w-4 h-4 rounded-full bg-green-500"></span>
-                        <span class="text-sm font-medium text-gray-400">Medium Risk:</span>
-                        <span class="w-4 h-4 rounded-full bg-yellow-500"></span>
-                        <span class="text-sm font-medium text-gray-400">High Risk:</span>
-                        <span class="w-4 h-4 rounded-full bg-red-500"></span>
-                    </div>
-                </div>
-                <div id="transactionList" class="scroll-container space-y-4">
-                    <!-- Transactions will be added here by JavaScript -->
-                    <div class="text-center text-gray-500 p-8">
-                        No transactions to display. Click "Simulate New Transaction" to begin.
-                    </div>
-                </div>
+      <div class="space-y-8">
+        <div class="bg-[#161b22] p-6 rounded-xl shadow-lg border border-gray-700">
+          <h2 class="text-xl font-semibold text-gray-200 mb-4">Alert System</h2>
+          <div id="alertBox" class="hidden alert-pulse bg-red-600 p-4 rounded-lg flex items-center space-x-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 002 0V6zm-1 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="text-white font-bold">HIGH RISK TRANSACTION DETECTED!</p>
+              <p class="text-gray-200 text-sm" id="alertMessage"></p>
             </div>
+          </div>
+          <p id="noAlertsText" class="text-gray-500 text-center py-4">No active alerts.</p>
+        </div>
 
-            <!-- Right Panel: Alerts & Statistics -->
-            <div class="space-y-8">
-                <!-- Alert System -->
-                <div class="bg-[#161b22] p-6 rounded-xl shadow-lg border border-gray-700">
-                    <h2 class="text-xl font-semibold text-gray-200 mb-4">Alert System</h2>
-                    <div id="alertBox" class="hidden alert-pulse bg-red-600 p-4 rounded-lg flex items-center space-x-3 transition-all duration-500 transform scale-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 002 0V6zm-1 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-                        </svg>
-                        <div>
-                            <p class="text-white font-bold">HIGH RISK TRANSACTION DETECTED!</p>
-                            <p class="text-gray-200 text-sm" id="alertMessage"></p>
-                        </div>
-                    </div>
-                    <p id="noAlertsText" class="text-gray-500 text-center py-4">No active alerts.</p>
-                </div>
-                <!-- Statistics Card -->
-                <div class="bg-[#161b22] p-6 rounded-xl shadow-lg border border-gray-700">
-                    <h2 class="text-xl font-semibold text-gray-200 mb-4">Dashboard Statistics</h2>
-                    <div class="grid grid-cols-2 gap-4 text-center">
-                        <div class="p-4 bg-[#21262d] rounded-lg">
-                            <p class="text-4xl font-bold text-green-500" id="totalTxns">0</p>
-                            <p class="text-sm text-gray-400">Total Transactions</p>
-                        </div>
-                        <div class="p-4 bg-[#21262d] rounded-lg">
-                            <p class="text-4xl font-bold text-red-500" id="fraudTxns">0</p>
-                            <p class="text-sm text-gray-400">Flagged Fraud</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="bg-[#161b22] p-6 rounded-xl shadow-lg border border-gray-700">
+          <h2 class="text-xl font-semibold text-gray-200 mb-4">Dashboard Statistics</h2>
+          <div class="grid grid-cols-2 gap-4 text-center">
+            <div class="p-4 bg-[#21262d] rounded-lg">
+              <p class="text-4xl font-bold text-green-500" id="totalTxns">0</p>
+              <p class="text-sm text-gray-400">Total Transactions</p>
             </div>
-        </main>
-    </div>
+            <div class="p-4 bg-[#21262d] rounded-lg">
+              <p class="text-4xl font-bold text-red-500" id="fraudTxns">0</p>
+              <p class="text-sm text-gray-400">Flagged Fraud</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
-    <!-- JavaScript to simulate the backend logic -->
-    <script>
-        // Use a simple data structure to represent transactions
-        let transactions = [];
-        let totalTransactions = 0;
-        let fraudTransactions = 0;
+<script>
+  let transactions = [];
+  let totalTransactions = 0;
+  let fraudTransactions = 0;
 
-        // Elements from the DOM
-        const transactionList = document.getElementById('transactionList');
-        const addTransactionBtn = document.getElementById('addTransactionBtn');
-        const alertBox = document.getElementById('alertBox');
-        const alertMessage = document.getElementById('alertMessage');
-        const noAlertsText = document.getElementById('noAlertsText');
-        const totalTxnsEl = document.getElementById('totalTxns');
-        const fraudTxnsEl = document.getElementById('fraudTxns');
+  const transactionList = document.getElementById('transactionList');
+  const addTransactionBtn = document.getElementById('addTransactionBtn');
+  const alertBox = document.getElementById('alertBox');
+  const alertMessage = document.getElementById('alertMessage');
+  const noAlertsText = document.getElementById('noAlertsText');
+  const totalTxnsEl = document.getElementById('totalTxns');
+  const fraudTxnsEl = document.getElementById('fraudTxns');
 
-        // Sample data for simulation
-        const locations = ['London, UK', 'New York, USA', 'Tokyo, Japan', 'Paris, France', 'Dubai, UAE', 'Moscow, Russia', 'Beijing, China', 'Sydney, Australia'];
-        const devices = ['Mobile', 'Desktop', 'Tablet'];
-        const highRiskLocations = ['Moscow, Russia', 'Beijing, China'];
+  const locations = ['London, UK','New York, USA','Tokyo, Japan','Paris, France','Dubai, UAE','Moscow, Russia','Beijing, China','Sydney, Australia'];
+  const devices = ['Mobile','Desktop','Tablet'];
+  const highRiskLocations = ['Moscow, Russia','Beijing, China'];
 
-        // Function to generate a random transaction
-        function generateRandomTransaction() {
-            const id = Math.random().toString(36).substr(2, 9).toUpperCase();
-            const amount = parseFloat((Math.random() * 1000 + 10).toFixed(2));
-            const location = locations[Math.floor(Math.random() * locations.length)];
-            const device = devices[Math.floor(Math.random() * devices.length)];
-            const timestamp = new Date().toLocaleString();
+  function generateRandomTransaction() {
+    const id = Math.random().toString(36).substr(2, 9).toUpperCase();
+    const amount = parseFloat((Math.random() * 1000 + 10).toFixed(2));
+    const location = locations[Math.floor(Math.random() * locations.length)];
+    const device = devices[Math.floor(Math.random() * devices.length)];
+    const timestamp = new Date().toLocaleString();
 
-            // Simple "ML model" logic to determine a fraud score
-            // This is a simulation based on simple rules
-            let fraudScore = 0;
-            let status = 'low';
+    let fraudScore = 0;
+    let status = 'low';
 
-            // Rule 1: High amount
-            if (amount > 800) {
-                fraudScore += 50;
-            }
-            // Rule 2: High-risk location
-            if (highRiskLocations.includes(location)) {
-                fraudScore += 40;
-            }
-            // Rule 3: Random high risk chance
-            if (Math.random() > 0.9) {
-                fraudScore += 30;
-            }
-            
-            // Determine risk status based on score
-            if (fraudScore > 70) {
-                status = 'high';
-                fraudTransactions++;
-            } else if (fraudScore > 40) {
-                status = 'medium';
-            }
-            
-            totalTransactions++;
+    if (amount > 800) fraudScore += 50;
+    if (highRiskLocations.includes(location)) fraudScore += 40;
+    if (Math.random() > 0.9) fraudScore += 30;
 
-            return { id, amount, location, device, timestamp, fraudScore, status };
-        }
+    if (fraudScore > 70) { status = 'high'; fraudTransactions++; }
+    else if (fraudScore > 40) status = 'medium';
 
-        // Function to render a single transaction to the DOM
-        function renderTransaction(transaction) {
-            const riskColor = {
-                'low': 'text-green-500',
-                'medium': 'text-yellow-500',
-                'high': 'text-red-500'
-            };
+    totalTransactions++;
+    return { id, amount, location, device, timestamp, fraudScore, status };
+  }
 
-            const transactionDiv = document.createElement('div');
-            transactionDiv.className = p-4 bg-[#21262d] rounded-lg border border-gray-600 transition-all duration-300 hover:bg-[#2e343e] ${transaction.status === 'high' ? 'border-red-500' : ''};
-            transactionDiv.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <div class="flex-1 min-w-0">
-                        <div class="font-bold text-lg text-gray-200 truncate">Transaction ID: ${transaction.id}</div>
-                        <div class="text-sm text-gray-400">Amount: $${transaction.amount}</div>
-                    </div>
-                    <div class="flex-shrink-0 text-right">
-                        <span class="text-sm font-medium ${riskColor[transaction.status]} capitalize">
-                            ${transaction.status} risk
-                        </span>
-                        <div class="text-xs text-gray-500">${transaction.timestamp}</div>
-                    </div>
-                </div>
-                <div class="mt-2 text-xs text-gray-500 space-x-2 flex items-center">
-                    <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                        </svg>
-                        ${transaction.location}
-                    </span>
-                    <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M7 3a1 1 0 00-1 1v1a1 1 0 001 1h6a1 1 0 001-1V4a1 1 0 00-1-1H7zM4 7a1 1 0 00-1 1v9a2 2 0 002 2h10a2 2 0 002-2V8a1 1 0 00-1-1h-1V6a2 2 0 00-2-2H8a2 2 0 00-2 2v1H4z" />
-                        </svg>
-                        ${transaction.device}
-                    </span>
-                </div>
-            `;
-            return transactionDiv;
-        }
+  function renderTransaction(t) {
+    const riskColor = { low:'text-green-500', medium:'text-yellow-500', high:'text-red-500' };
+    const div = document.createElement('div');
+    div.className = `p-4 bg-[#21262d] rounded-lg border border-gray-600 transition-all duration-300 hover:bg-[#2e343e] ${t.status === 'high' ? 'border-red-500' : ''}`;
+    div.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-lg text-gray-200 truncate">Transaction ID: ${t.id}</div>
+          <div class="text-sm text-gray-400">Amount: $${t.amount}</div>
+        </div>
+        <div class="flex-shrink-0 text-right">
+          <span class="text-sm font-medium ${riskColor[t.status]} capitalize">${t.status} risk</span>
+          <div class="text-xs text-gray-500">${t.timestamp}</div>
+        </div>
+      </div>
+      <div class="mt-2 text-xs text-gray-500 space-x-4 flex items-center">
+        <span class="flex items-center">📍 ${t.location}</span>
+        <span class="flex items-center">💻 ${t.device}</span>
+      </div>`;
+    return div;
+  }
 
-        // Function to update statistics
-        function updateStats() {
-            totalTxnsEl.textContent = totalTransactions;
-            fraudTxnsEl.textContent = fraudTransactions;
-        }
+  function updateStats() {
+    totalTxnsEl.textContent = totalTransactions;
+    fraudTxnsEl.textContent = fraudTransactions;
+  }
 
-        // Function to display an alert
-        function displayAlert(transaction) {
-            alertMessage.textContent = Transaction ID: ${transaction.id}, Amount: $${transaction.amount};
-            alertBox.classList.remove('hidden');
-            noAlertsText.classList.add('hidden');
-        }
+  function displayAlert(t) {
+    alertMessage.textContent = `Transaction ID: ${t.id}, Amount: $${t.amount}`;
+    alertBox.classList.remove('hidden');
+    noAlertsText.classList.add('hidden');
+  }
 
-        // Event listener for the button
-        addTransactionBtn.addEventListener('click', () => {
-            // Remove the initial placeholder text
-            const placeholder = transactionList.querySelector('div.text-center');
-            if (placeholder) {
-                placeholder.remove();
-            }
+  addTransactionBtn.addEventListener('click', () => {
+    const placeholder = transactionList.querySelector('div.text-center');
+    if (placeholder) placeholder.remove();
 
-            const newTransaction = generateRandomTransaction();
-            transactions.unshift(newTransaction);
-            
-            const newTransactionEl = renderTransaction(newTransaction);
-            // Prepend the new transaction to the list
-            if (transactionList.firstChild) {
-                transactionList.insertBefore(newTransactionEl, transactionList.firstChild);
-            } else {
-                transactionList.appendChild(newTransactionEl);
-            }
+    const t = generateRandomTransaction();
+    transactions.unshift(t);
 
-            // Remove old transactions to keep the list clean
-            if (transactions.length > 20) {
-                transactions.pop();
-                transactionList.removeChild(transactionList.lastChild);
-            }
+    const el = renderTransaction(t);
+    if (transactionList.firstChild) transactionList.insertBefore(el, transactionList.firstChild);
+    else transactionList.appendChild(el);
 
-            // Trigger the alert if it's a high-risk transaction
-            if (newTransaction.status === 'high') {
-                displayAlert(newTransaction);
-            }
-            
-            updateStats();
-        });
+    if (transactions.length > 20) {
+      transactions.pop();
+      transactionList.removeChild(transactionList.lastChild);
+    }
 
-        // Initialize with a few transactions on load
-        window.onload = function() {
-            for(let i = 0; i < 5; i++) {
-                addTransactionBtn.click();
-            }
-        };
+    if (t.status === 'high') displayAlert(t);
+    updateStats();
+  });
 
-    </script>
-
+  window.onload = () => { for (let i = 0; i < 5; i++) addTransactionBtn.click(); };
+</script>
 </body>
 </html>
-//changed
