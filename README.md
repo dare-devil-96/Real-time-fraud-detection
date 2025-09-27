@@ -5,6 +5,7 @@
 * Arushi Jain
 * Jasmitha Lokesh
 * Gnana Prasuna M
+  
   *College*: SRM Institute of Science & Technology, Kattankulathur, Chennai
   *Theme*: AI for Core Applications
 
